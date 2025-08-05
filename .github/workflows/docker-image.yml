@@ -1,0 +1,43 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'eclipse-temurin'
+
+    - name: Build with Maven
+      run: maven clean package -DskipTests
+
+    - name: Login to Docker Hub using CLI
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+      # docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      
+      
+    - name: Build the Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/demo-springboot:latest
+      # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Push the docker image
+      run: |
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/demo-springboot:latest
+
+      
