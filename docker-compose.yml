@@ -20,7 +20,8 @@ services:
   app:
     image: superrfluid/demo-springboot:latest
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8090:8090"
     environment:
