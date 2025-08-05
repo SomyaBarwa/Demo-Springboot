@@ -23,7 +23,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven
-      run: maven clean package -DskipTests
+      run: mvn clean package -DskipTests
 
     - name: Login to Docker Hub using CLI
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
