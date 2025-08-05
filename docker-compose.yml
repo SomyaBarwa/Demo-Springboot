@@ -1,41 +1,14 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8
-    container_name: db
-    environment:
-      MYSQL_DATABASE: db
-      MYSQL_ROOT_PASSWORD: root
-
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   app:
     image: superrfluid/demo-springboot:latest
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
       - "8090:8090"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SERVER_PORT: 8090
       SERVER_SERVLET_CONTEXT_PATH: /api/v1
       SPRING_APPLICATION_NAME: demo-springboot
       LOGGING_FILE_NAME: app.log
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: 1.0
     restart: unless-stopped
-
-volumes:
-  db_data:
