@@ -33,7 +33,7 @@ jobs:
       
     - name: Build the Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/demo-springboot:latest
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/demo-springboot:latest .
       # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
     - name: Push the docker image
